@@ -23,8 +23,8 @@ class EmployeeMPTT(MPTTModel):
     full_name = models.CharField(max_length=100)
     role = models.CharField(max_length=25, choices=EMPLOYEE_TYPES)
     date_of_employment = models.DateField(default=date.today)
-    salary_amount = models.DecimalField(max_digits=7, decimal_places=2)
-    paid_salary_inf = models.DecimalField(max_digits=10, decimal_places=2)
+    salary_amount = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    paid_salary_inf = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='employee', on_delete=models.SET_NULL)
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True)
 
@@ -33,3 +33,6 @@ class EmployeeMPTT(MPTTModel):
 
     def __repr__(self):
         return self.__str__()
+
+
+
