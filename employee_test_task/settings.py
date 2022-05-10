@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'employees.apps.EmployeesConfig',
 
     'rest_framework',
+    'django_seed',
 ]
 
 MIDDLEWARE = [
