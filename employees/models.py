@@ -34,5 +34,7 @@ class EmployeeMPTT(MPTTModel):
     def __repr__(self):
         return self.__str__()
 
-
+    def add_salary(self):
+        self.paid_salary_inf = self.paid_salary_inf + self.salary_amount
+        return self.paid_salary_inf
 
