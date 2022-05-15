@@ -1,0 +1,46 @@
+version: '3.3'
+
+services:
+  redis:
+    image: redis
+    container_name: 'demo_app_redis'
+    command: redis-server
+    ports:
+      - '6379:6379'
+  db:
+    image: postgres:10.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - DATABASE_NAME="${DATABASE_NAME}"
+      - DATABASE_USER="${DATABASE_USER}"
+      - DATABASE_PASS="${DATABASE_PASS}"
+  web:
+    build: .
+    command: sh -c "
+      sleep 10 &&
+      python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000 "
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    environment:
+      - SECRET_KEY="${SECRET_KEY}"
+  celery:
+    build: .
+    container_name: 'my_demo_app_celery'
+    volumes:
+      - .:/code
+    links:
+      - redis
+    depends_on:
+      - web
+      - redis
+volumes:
+  postgres_data:
